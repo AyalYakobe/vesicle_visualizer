@@ -1,3 +1,4 @@
+import edt
 import h5py
 import numpy as np
 import pyvista as pv
@@ -14,7 +15,16 @@ def load_data(neuron_file_path, vesicle_file_path):
     return neuron_data, vesicle_data
 
 def calculate_distance_transform(neuron_data):
-    return distance_transform_edt(neuron_data == 0, sampling=scaling_factors)
+
+    print(np.unique(neuron_data))
+    import pdb
+    pdb.set_trace()
+    # return_edt = edt.edt(neuron_data == 0, anisotropy=(8, 8, 30), black_border=True, order='F', parallel=4)
+    # return_edt = edt.edt(neuron_data, anisotropy=(8, 8, 30), black_border=True, order='F')
+    return_edt = edt.edt(neuron_data.astype(np.uint32), anisotropy=(8, 8, 30), black_border=True, order='F')
+    return return_edt
+# def calculate_distance_transform(neuron_data):
+#     return distance_transform_edt(neuron_data == 0, sampling=scaling_factors)
 
 def identify_vesicles_within_perimeter(labeled_vesicles, distance_transform, perimeter_distance_threshold):
     vesicles_within_perimeter = []
@@ -81,3 +91,4 @@ def load_calculate_and_visualize_neuron_and_vesicles(neuron_file_path, vesicle_f
 
     num_vesicles_within_perimeter = len(vesicles_within_perimeter)
     print("Number of vesicle objects within the perimeter:", num_vesicles_within_perimeter)
+    print(np.percentile(calculate_distance_transform(neuron_data),[10,50,90]))

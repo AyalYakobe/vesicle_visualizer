@@ -39,4 +39,4 @@ def object_file_converter():
 
 
 if __name__ == "__main__":
-    vizualization_and_calculations_tensors_just_perimeter()
+    vizualization_and_calculations_tensors()
