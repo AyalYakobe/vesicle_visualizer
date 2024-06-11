@@ -15,12 +15,8 @@ def load_data(neuron_file_path, vesicle_file_path):
     return neuron_data, vesicle_data
 
 def calculate_distance_transform(neuron_data):
-
-    print(np.unique(neuron_data))
-    return_edt = edt.edt(1-neuron_data, anisotropy=(8, 8, 30))
+    return_edt = edt.edt(1-neuron_data.astype(np.uint32), anisotropy=(8, 8, 30), black_border=True, order='F')
     return return_edt
-# def calculate_distance_transform(neuron_data):
-#     return distance_transform_edt(neuron_data == 0, sampling=scaling_factors)
 
 def identify_vesicles_within_perimeter(labeled_vesicles, distance_transform, perimeter_distance_threshold):
     vesicles_within_perimeter = []
