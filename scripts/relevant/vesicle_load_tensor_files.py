@@ -17,7 +17,7 @@ def load_data(neuron_file_path, vesicle_file_path):
 def calculate_distance_transform(neuron_data):
 
     print(np.unique(neuron_data))
-    return_edt = edt.edt(1-neuron_data.astype(np.uint32), anisotropy=(8, 8, 30), black_border=True, order='F')
+    return_edt = edt.edt(1-neuron_data, anisotropy=(8, 8, 30))
     return return_edt
 # def calculate_distance_transform(neuron_data):
 #     return distance_transform_edt(neuron_data == 0, sampling=scaling_factors)
@@ -73,11 +73,13 @@ def load_calculate_and_visualize_neuron_and_vesicles(neuron_file_path, vesicle_f
         perimeter_distance_threshold_nm / scaling_factors[1],  # y axis
         perimeter_distance_threshold_nm / scaling_factors[2]   # z axis
     )
+    perimeter_distance_threshold_voxels = 1000
+    perimeter_distance_threshold_voxels = 100
 
     vesicles_within_perimeter, vesicles_within_perimeter_labels = identify_vesicles_within_perimeter(
-        labeled_vesicles, distance_transform, min(perimeter_distance_threshold_voxels))
+        labeled_vesicles, distance_transform, perimeter_distance_threshold_voxels)
 
-    perimeter_mask = distance_transform <= min(perimeter_distance_threshold_voxels)
+    perimeter_mask = distance_transform <= perimeter_distance_threshold_voxels
     perimeter_positions = np.argwhere(perimeter_mask)
 
     neuron_positions = np.column_stack(np.nonzero(neuron_data))
